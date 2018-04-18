@@ -1,0 +1,21 @@
+1. Compile victim.c (as DLL) and runme.c (as exe) 
+   to run victim / host code
+2. Compile injector.cpp (as exe) to inject runme 
+3. Run runme and note the PID 
+4. For each exercise, do
+   1. compile the dll
+   2. inject with
+      $ injector <PID> <dll path>
+
+# Exercise 1
+See that when DLL is injected, the DllMain is invoked
+
+# Exercise 2
+- Check the address of global in runme (menu 4)
+- Adjust the address of global
+- See that when DLL is injected the value of global variable is changed
+
+# Exercise 3
+- See the address of all modules (menu 2)
+- See again the address after DLL is injected.
+- What is IAT?
