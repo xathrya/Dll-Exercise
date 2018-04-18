@@ -1,0 +1,34 @@
+Attack
+	Binary Planting
+	DLL Hijacking
+	DLL Preloading
+	Insecure Library Loading
+	DLL Load Hijacking
+	DLL SPoofing
+
+
+
+Known DLL
+	list of values in registry where it is lookup first when import is resolved.
+	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session manager\KnownDLLs
+
+
+Search Order Hijacking
+	Search Path
+		- The directory from which the application is loaded
+		- The current directory
+		- The system directory, usually C:\\Windows\\System32\\ (The GetSystemDirectory function is called to obtain this directory.)
+		- The 16-bit system directory – There is no dedicated function to retrieve the path of this directory, but it is searched as well.
+		- The Windows directory. The GetWindowsDirectory function is called to obtain this directory.
+		- The directories that are listed in the PATH environment variable
+
+DLL Side-Loading Attack
+https://www.fireeye.com/content/dam/fireeye-www/global/en/current-threats/pdfs/rpt-dll-sideloading.pdf
+	Make use of WinSxS directory.
+		- WinSxS feature is used by many application to prevent problems that can arise due to updated and duplicated version of DLLs.
+		- C:\Windows\WinSxS
+		- Using manifest to retrieve DLL from WinSxS directory.
+		- Manifest list the DLL that can be used at run time by application and used by loader to determine which version of DLL to use.
+
+Phantom DLL Hijacking
+

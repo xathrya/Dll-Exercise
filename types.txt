@@ -1,0 +1,17 @@
+Types of DLL
+============
+- Load-time dynamic linking
+- Run-time dynamic linking
+
+Load-Time Dynamic Linking 
+======
+Application makes explicit calls to the exported DLL functions like local functions.
+To use, provide a header (.h) file and an import library (.lib) file when compiling and 
+linking the application. Linker will provide information required by system to load 
+the DLL and resolve the exported DLL function locations at load time.
+
+Run-Time Dynamic Linking 
+======
+Application calls API LoadLibrary() or LoadLibraryEx() to load the DLL at runtime.
+After DLL is successfully loaded, use GetProcAddress() to obtain the address of exported
+DLL function.
