@@ -1,4 +1,5 @@
-# Simple self-exercises for learning DLL creation and utilization.
+# DLL Exercises
+Simple self-exercises for learning DLL creation and utilization.
 
 # Knowledge
 - MSDN Dynamic-Link Libraries - https://msdn.microsoft.com/en-us/library/windows/desktop/ms682589%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
