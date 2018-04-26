@@ -2,7 +2,7 @@
 Inject DLL to remote process
 
 Compile:
-    $ g++ injector -o injector
+    $ g++ injector.cpp -o injector
 
 Run:
     $ injector <PID> <dll path>
@@ -49,6 +49,7 @@ int inject(const int pid, const char* dll_path)
     void * alloc_addr;
     int    dll_path_len = strlen(dll_path) + 1;
     int    write_result;
+    DWORD  tid;
 
     int    error_code;
     char   error_message_buffer[256];
@@ -66,6 +67,7 @@ int inject(const int pid, const char* dll_path)
         fprintf(stderr, "[!] Cannot open the remote process!\nDetail: %d %s\n", error_code, error_message_buffer);
         return 1;
     }
+    printf("    [=] Handle obtained: %p\n", remote);
 
     // [2] Allocating space in the process
     // API: LPVOID VirtualAllocEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
@@ -80,6 +82,7 @@ int inject(const int pid, const char* dll_path)
         fprintf(stderr, "[!] Cannot allocate memory on remote process!\nDetail: %d %s\n", error_code, error_message_buffer);
         return 2;
     }
+    printf("    [=] Address allocated: %p\n", alloc_addr);
 
     // [3] Write DLL path on remote process
     // API: BOOL WriteProcessMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPCVOID lpBuffer, SIZE_T nSize, SIZE_T * lpNumberOfBytesWritten);
@@ -96,23 +99,25 @@ int inject(const int pid, const char* dll_path)
         fprintf(stderr, "[!] Cannot write to process memory!\nDetail: %d %s\n", error_code, error_message_buffer);
         return 3;
     }
+    printf("    [=] Writing success!\n";
 
     // [4] Resolve address of kernel32.dll & LoadLibraryA function
     // API: HMODULE GetModuleHandleA(LPCSTR lpModuleName);
     printf("[+] Resolving call specific functions and libraries\n");
     HMODULE kernel_handle_addr = GetModuleHandleA("kernel32.dll");
-    printf("\t[*] Resolved kernel32 library at 0x%08x\n", kernel_handle_addr);
+    printf("    [=] Resolved kernel32 library at 0x%08x\n", kernel_handle_addr);
 
     // API: FARPROC GetProcAddress(HMODULE hModule,LPCSTR lpProcName);
     void * load_lib = (LPVOID) GetProcAddress(kernel_handle_addr, "LoadLibraryA");
-    printf("\t[*] Resolved LoadLibraryA function at 0x%08x\n", load_lib);
+    printf("    [=] Resolved LoadLibraryA function at 0x%08x\n", load_lib);
 
     // [5] Create new thread on remote target to execute LoadLibraryA with our DLL path as argument
     // API: HANDLE CreateRemoteThread(
     //              HANDLE hProcess, LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, 
     //              LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
     printf("[+] Creating Remote Thread to load our DLL\n");
-    remote_thread = CreateRemoteThread(remote, NULL, 0, (LPTHREAD_START_ROUTINE) load_lib, alloc_addr, 0, NULL);
+    remote_thread = CreateRemoteThread(remote, NULL, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(load_lib), alloc_addr, 0, &tid);
+    printf("    [=] Spawning thread with ID: %d\n", tid);
     if (remote_thread == NULL)
     {
         VirtualFreeEx(remote, alloc_addr, 0, MEM_RELEASE);
@@ -126,6 +131,7 @@ int inject(const int pid, const char* dll_path)
 
     // API: DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
     WaitForSingleObject(remote_thread, INFINITE);
+
     VirtualFreeEx(remote, alloc_addr, 0, MEM_RELEASE);
     CloseHandle(remote);
 
