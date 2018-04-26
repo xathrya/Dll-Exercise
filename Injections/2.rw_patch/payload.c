@@ -14,6 +14,8 @@ using MSVC:
 extern "C" {
 #endif
 
+// fill with the location of global variable
+#define ADDRESS 0x404010
 
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpres)
 {
@@ -22,7 +24,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpres)
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            global = (int*)0x404010;   // fill with the location of global variable
+            global = (int*) ADDRESS;
 
             printf("\n\n");
             printf("Value of global = %d\n", *global);
