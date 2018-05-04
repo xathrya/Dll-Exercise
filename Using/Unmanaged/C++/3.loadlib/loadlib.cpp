@@ -12,7 +12,7 @@ Compile:
 	$ cl /nologo loadlib.cpp
 	
 run:
-	loadlib.exe
+	$ loadlib.exe
 */
 
 #include <windows.h>
@@ -47,7 +47,7 @@ int main()
 {
 	int result;
 
-	// Load DLL module to executable mapped memory =====================
+	// Load DLL module =================================================
 	// Before getting the address of function, we need to load the library
 	// and let it mapped to our memory.
 	HMODULE hDll = LoadLibrary("unmanaged.dll");
