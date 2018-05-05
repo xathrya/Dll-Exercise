@@ -8,7 +8,7 @@ using MSVC:
 	$ cl /nologo client.cpp unmanaged.lib
 	
 run:
-	client.exe
+	$ client.exe
 */
 #include <cstdio>
 #include "DllClass.hpp"

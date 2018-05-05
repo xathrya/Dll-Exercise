@@ -1,11 +1,17 @@
 /*
-Simple client to use unmanaged.dll. 
+Create a DLL where no original .lib / .a file found.
+Implicit linking.
 
-Implicit linking
-The DLL has .lib which is used to create definition of IAT.
-This is the case where the .lib file is available.
+Create a .DEF file and then use it to generate a .lib file.
 
-Compile:
+Creating import lib:
+	(gcc)
+	$ dlltool -l unmanaged.lib -d unmanaged.def
+
+	(msvc)
+	$ lib /def:unmanaged.def /machine:x64
+
+Compiling:
 	(gcc)
 	$ g++ client.cpp -o client.exe -L. -lunmanaged
 
@@ -13,7 +19,7 @@ Compile:
 	$ cl /nologo client.cpp unmanaged.lib
 	
 run:
-	client.exe
+	$ client.exe
 */
 #include <windows.h>
 #include <cstdio>

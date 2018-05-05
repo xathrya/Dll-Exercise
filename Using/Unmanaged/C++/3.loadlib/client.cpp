@@ -6,13 +6,13 @@ Explicit linking
 
 Compile:
 	(gcc)
-	$ g++ loadlib.cpp -o loadlib.exe
+	$ g++ client.cpp -o client.exe
 
 	(msvc)
-	$ cl /nologo loadlib.cpp
+	$ cl /nologo client.cpp
 	
 run:
-	$ loadlib.exe
+	$ client.exe
 */
 
 #include <windows.h>
