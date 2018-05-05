@@ -9,7 +9,7 @@ run:
     rundll32 hello.dll,world
 }
 
-library hello;
+library unmanaged;
 
 {$mode objfpc}{$H+}
 
@@ -18,9 +18,9 @@ uses
     SysUtils,
     Windows;
 
-function magic : Int64; stdcall;
+function calculate(n : Int64) : Int64; stdcall;
 begin 
-    result := 135;
+    result := n + 135;
 end;
 
 procedure world; export;
@@ -28,7 +28,7 @@ begin
     MessageBox(0,PChar('This is a message'), PChar('Title'), mb_ok)
 end;
 
-exports magic, world;
+exports calculate, world;
 
 begin
 end.
